@@ -1,0 +1,37 @@
+.header {
+  font-family: "Lucida Console", "Courier New", monospace;
+  text-align: center;
+}
+
+.box {
+  text-align: center;
+  color: black;
+  background-color: rgb(194, 192, 192);
+  padding: 25px;
+  margin-left: 50px;
+  margin-right: 50px;
+  border-radius: 15px 15px 15px 15px;
+  border-color: black;
+  border-width: 10px;
+}
+
+.top-row {
+  display: flex;
+  flex-direction: row;
+  grid-column: 4;
+  justify-content: space-between;
+  margin: 10px;
+}
+
+.bottom-row {
+  display: flex;
+  flex-direction: row;
+  grid-column: 4;
+  justify-content: space-between;
+  margin: 10px;
+}
+
+.text-box {
+  padding-top: 50px;
+  color: rgb(73, 72, 72);
+}
