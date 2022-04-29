@@ -5,11 +5,13 @@ import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
 import NativeSelect from "@material-ui/core/NativeSelect";
+import { use } from "../../../server/routes/getData";
 
 
 
 const Dashboard = ({ setAuth }) => {
   const [name, setName] = useState("");
+  const [uuid, setUuid] = useState("");
 
   const getProfile = async () => {
     try {
@@ -20,6 +22,7 @@ const Dashboard = ({ setAuth }) => {
 
       const parseData = await res.json();
       setName(parseData.user_name);
+      setUuid(parseData.user_id);
     } catch (err) {
       console.error(err.message);
     }
@@ -109,7 +112,7 @@ const Dashboard = ({ setAuth }) => {
       const res = await fetch("http://localhost:5001/insertdata/", {
         method: "POST",
         headers: { jwt_token: localStorage.token },
-        body: JSON.stringify({user_id: "b2306367-c0d1-4b7a-99a1-7cb945e1cef7",
+        body: JSON.stringify({user_id: uuid,
               token: coin,
               buy_date: buyDate,
               sell_date: sellDate,
