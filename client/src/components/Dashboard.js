@@ -103,6 +103,31 @@ const Dashboard = ({ setAuth }) => {
     coingeckoFetch(null, coin, val);
   };
 
+  const submitTrade = async () => {
+  
+    try {
+      const res = await fetch("http://localhost:5001/insertdata/", {
+        method: "POST",
+        headers: { jwt_token: localStorage.token },
+        body: JSON.stringify({user_id: "b2306367-c0d1-4b7a-99a1-7cb945e1cef7",
+              token: coin,
+              buy_date: buyDate,
+              sell_date: sellDate,
+              amount: volume})
+      }
+      )
+      ;
+      
+    
+    } catch (err) {
+      console.error(err.message);
+    }
+    
+
+
+
+  }
+
   return (
     <div>
       <h1 className="header"> 📈🚀Welcome {name}, Caclculate your Returns 😢📉 </h1>
@@ -152,8 +177,8 @@ const Dashboard = ({ setAuth }) => {
           </Box>
         </div>
         <div className="bottom-row"></div>
-        <Button variant="contained" color="primary" onClick={calcGains}>
-          Calculate
+        <Button variant="contained" color="primary" onClick={submitTrade}>
+          Post to DB
         </Button>
         <h3>
           You bought {trade.buyData.name} at:{" "}
