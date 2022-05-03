@@ -6,7 +6,7 @@ const { response } = require("express");
 
 router.get("/", (req, res) => {
   const id = req.body;
-  pool.query("SELECT * FROM txn WHERE user_id::text = $1", [id], (error, results) => {
+  pool.query("SELECT * FROM txn WHERE user_id::text = 'c76d3b50-c287-49b3-b163-240b61bbdb6b'", (error, results) => {
          if (error) {
            res.send(error)
           //  res.json({blah: 'blah'})

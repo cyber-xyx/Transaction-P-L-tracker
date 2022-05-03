@@ -107,6 +107,11 @@ const Dashboard = ({ setAuth }) => {
     coingeckoFetch(null, coin, val);
   };
 
+  const buyvolume = trade.buyData.market_data?.current_price.usd
+  const sellvolume = trade.sellData.market_data?.current_price.usd
+
+
+
   const submitTrade = async () => {
     try {
       let user_id = uuid;
@@ -114,8 +119,10 @@ const Dashboard = ({ setAuth }) => {
       let buy_date = buyDate;
       let sell_date = sellDate;
       let amount = volume;
+      let buy_volume = buyvolume;
+      let sell_volume = sellvolume;
 
-      const body = {user_id, token, buy_date, sell_date, amount}
+      const body = {user_id, token, buy_date, sell_date, amount, buy_volume, sell_volume}
       const res = await fetch("http://localhost:5001/insertdata/", {  
       method: "POST",
         headers: { jwt_token: localStorage.token,  "Content-type": "application/json" },
@@ -129,7 +136,7 @@ const Dashboard = ({ setAuth }) => {
     }
 
   }
-  
+
   return (
     <div>
       <h1 className="header"> 📈🚀Welcome {name}, Caclculate your Returns 😢📉 </h1>
