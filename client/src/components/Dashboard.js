@@ -5,7 +5,7 @@ import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
 import NativeSelect from "@material-ui/core/NativeSelect";
-import { use } from "../../../server/routes/getData";
+// import { use } from "../../../server/routes/getData";
 
 
 
@@ -21,8 +21,9 @@ const Dashboard = ({ setAuth }) => {
       });
 
       const parseData = await res.json();
-      setName(parseData.user_name);
-      setUuid(parseData.user_id);
+      console.log(parseData);
+      //setName(parseData.user_name);
+      setUuid(parseData);
     } catch (err) {
       console.error(err.message);
     }
@@ -107,30 +108,28 @@ const Dashboard = ({ setAuth }) => {
   };
 
   const submitTrade = async () => {
-  
     try {
-      const res = await fetch("http://localhost:5001/insertdata/", {
-        method: "POST",
-        headers: { jwt_token: localStorage.token },
-        body: JSON.stringify({user_id: uuid,
-              token: coin,
-              buy_date: buyDate,
-              sell_date: sellDate,
-              amount: volume})
+      let user_id = uuid;
+      let token = coin;
+      let buy_date = buyDate;
+      let sell_date = sellDate;
+      let amount = volume;
+
+      const body = {user_id, token, buy_date, sell_date, amount}
+      const res = await fetch("http://localhost:5001/insertdata/", {  
+      method: "POST",
+        headers: { jwt_token: localStorage.token,  "Content-type": "application/json" },
+        body: JSON.stringify(body)
       }
       )
       ;
       
-    
     } catch (err) {
       console.error(err.message);
     }
-    
-
-
 
   }
-
+  
   return (
     <div>
       <h1 className="header"> 📈🚀Welcome {name}, Caclculate your Returns 😢📉 </h1>
@@ -194,6 +193,12 @@ const Dashboard = ({ setAuth }) => {
         <h1 style={{ color: trade.gains < -1 ? "red" : "green" }}>
           🤑💸 Returns: ${trade.gains.toFixed(2)} USD 💸🤑
         </h1>
+
+      </Box>
+     
+      <h1 className="header">Your past transactions</h1>
+      <Box className="box">
+
 
       </Box>
 

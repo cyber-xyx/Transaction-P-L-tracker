@@ -12,7 +12,7 @@ router.get("/", (req, res) => {
           //  res.json({blah: 'blah'})
           //  throw error
          }
-         res.status(200).send(results.rows)
+         res.status(200).send(results)
        })
   });
   module.exports = router;
