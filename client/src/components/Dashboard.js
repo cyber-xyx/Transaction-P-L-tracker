@@ -5,13 +5,14 @@ import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
 import NativeSelect from "@material-ui/core/NativeSelect";
-// import { use } from "../../../server/routes/getData";
+import DisplayTable from "./DisplayTable";
 
 
 
 const Dashboard = ({ setAuth }) => {
-  const [name, setName] = useState("");
+ // const [name, setName] = useState("");
   const [uuid, setUuid] = useState("");
+  const [tradeData, setTradeData] = useState([]);
 
   const getProfile = async () => {
     try {
@@ -107,7 +108,7 @@ const Dashboard = ({ setAuth }) => {
     coingeckoFetch(null, coin, val);
   };
 
-  const buyvolume = trade.buyData.market_data?.current_price.usd
+  const buyvolume = trade.buyData.market_data?.current_price.usd;
   const sellvolume = trade.sellData.market_data?.current_price.usd
 
 
@@ -128,8 +129,7 @@ const Dashboard = ({ setAuth }) => {
         headers: { jwt_token: localStorage.token,  "Content-type": "application/json" },
         body: JSON.stringify(body)
       }
-      )
-      ;
+      );
       
     } catch (err) {
       console.error(err.message);
@@ -137,9 +137,32 @@ const Dashboard = ({ setAuth }) => {
 
   }
 
+  const retrieveTrade = async () => {
+    try{
+  
+      const res = await fetch("http://localhost:5001/getdata/", {  
+        method: "POST",
+        headers: { jwt_token: localStorage.token,  "Content-type": "application/json" },
+        body: JSON.stringify({
+          user_id: uuid
+      })
+      });
+      const data = await res.json();
+      setTradeData(data);
+    } catch (err) {
+      console.log(err.message)  
+    }
+  }
+  console.log(tradeData);
+
+  useEffect(() => {
+    retrieveTrade();
+  }, []);
+ 
+
   return (
     <div>
-      <h1 className="header"> 📈🚀Welcome {name}, Caclculate your Returns 😢📉 </h1>
+      <h1 className="header"> 📈🚀Calculate your Returns 😢📉 </h1>
       <Box className="box">
         <div className="top-row">
           <Box>
@@ -197,16 +220,21 @@ const Dashboard = ({ setAuth }) => {
           You sold {trade.buyData.name} at:{" "}
           {trade.sellData.market_data?.current_price.usd.toFixed(2)} USD
         </h3>
-        <h1 style={{ color: trade.gains < -1 ? "red" : "green" }}>
-          🤑💸 Returns: ${trade.gains.toFixed(2)} USD 💸🤑
-        </h1>
+
 
       </Box>
      
       <h1 className="header">Your past transactions</h1>
       <Box className="box">
-
-
+      <Button variant="contained" color="primary" onClick={retrieveTrade}>
+          Get my transactions
+        </Button>
+      <h1 style={{ color: trade.gains < -1 ? "red" : "green" }}>
+          🤑💸 Returns: ${trade.gains.toFixed(2)} USD 💸🤑
+      </h1>
+      <div className="table">
+        <DisplayTable tradeData={tradeData}/>
+    	</div>
       </Box>
 
       <button onClick={e => logout(e)} className="header">

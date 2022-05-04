@@ -35,3 +35,9 @@
   padding-top: 50px;
   color: rgb(73, 72, 72);
 }
+
+.table {
+  display: flex;
+  justify-content: center;
+  border: 1px solid gray;
+}
