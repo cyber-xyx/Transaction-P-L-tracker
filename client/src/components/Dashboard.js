@@ -13,6 +13,7 @@ const Dashboard = ({ setAuth }) => {
  // const [name, setName] = useState("");
   const [uuid, setUuid] = useState("");
   const [tradeData, setTradeData] = useState([]);
+  const [profit, setProfit] = useState("");
 
   const getProfile = async () => {
     try {
@@ -111,8 +112,6 @@ const Dashboard = ({ setAuth }) => {
   const buyvolume = trade.buyData.market_data?.current_price.usd;
   const sellvolume = trade.sellData.market_data?.current_price.usd
 
-
-
   const submitTrade = async () => {
     try {
       let user_id = uuid;
@@ -136,6 +135,10 @@ const Dashboard = ({ setAuth }) => {
     }
 
   }
+  const doubleFunction = () => {
+    calcGains();
+    submitTrade();
+  }
 
   const retrieveTrade = async () => {
     try{
@@ -157,6 +160,7 @@ const Dashboard = ({ setAuth }) => {
 
   useEffect(() => {
     retrieveTrade();
+    
   }, []);
  
 
@@ -209,7 +213,7 @@ const Dashboard = ({ setAuth }) => {
           </Box>
         </div>
         <div className="bottom-row"></div>
-        <Button variant="contained" color="primary" onClick={submitTrade}>
+        <Button variant="contained" color="primary" onClick={doubleFunction}>
           Post to DB
         </Button>
         <h3>
@@ -220,8 +224,9 @@ const Dashboard = ({ setAuth }) => {
           You sold {trade.buyData.name} at:{" "}
           {trade.sellData.market_data?.current_price.usd.toFixed(2)} USD
         </h3>
-
-
+              <h1 style={{ color: trade.gains < -1 ? "red" : "green" }}>
+          🤑💸 Returns: ${trade.gains.toFixed(2)} USD 💸🤑
+      </h1>
       </Box>
      
       <h1 className="header">Your past transactions</h1>
@@ -229,9 +234,7 @@ const Dashboard = ({ setAuth }) => {
       <Button variant="contained" color="primary" onClick={retrieveTrade}>
           Get my transactions
         </Button>
-      <h1 style={{ color: trade.gains < -1 ? "red" : "green" }}>
-          🤑💸 Returns: ${trade.gains.toFixed(2)} USD 💸🤑
-      </h1>
+
       <div className="table">
         <DisplayTable tradeData={tradeData}/>
     	</div>
