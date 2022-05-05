@@ -6,14 +6,14 @@ import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
 import NativeSelect from "@material-ui/core/NativeSelect";
 import DisplayTable from "./DisplayTable";
-
+import ProfitTable from  "./ProfitTable";
 
 
 const Dashboard = ({ setAuth }) => {
  // const [name, setName] = useState("");
   const [uuid, setUuid] = useState("");
   const [tradeData, setTradeData] = useState([]);
-  const [profit, setProfit] = useState("");
+  const [profit, setProfit] = useState([]);
 
   const getProfile = async () => {
     try {
@@ -158,10 +158,31 @@ const Dashboard = ({ setAuth }) => {
   }
   console.log(tradeData);
 
+  const generateProfit = async () => {
+    try{
+  
+      const res = await fetch("http://localhost:5001/retrievedata/", {  
+        method: "POST",
+        headers: { jwt_token: localStorage.token,  "Content-type": "application/json" },
+        body: JSON.stringify({
+          user_id: uuid
+      })
+      });
+      const data = await res.json();
+      setProfit(data);
+    } catch (err) {
+      console.log(err.message)  
+    }
+  }
+  console.log(profit);
+
   useEffect(() => {
+    generateProfit();
     retrieveTrade();
     
   }, []);
+
+
  
 
   return (
@@ -229,7 +250,7 @@ const Dashboard = ({ setAuth }) => {
       </h1>
       </Box>
      
-      <h1 className="header">Your past transactions</h1>
+      <h1 className="header">Your transaction log</h1>
       <Box className="box">
       <Button variant="contained" color="primary" onClick={retrieveTrade}>
           Get my transactions
@@ -239,6 +260,19 @@ const Dashboard = ({ setAuth }) => {
         <DisplayTable tradeData={tradeData}/>
     	</div>
       </Box>
+
+            <h1 className="header">Your overall Profit loss</h1>
+      <Box className="box">
+      <Button variant="contained" color="primary" onClick={generateProfit}>
+          Update Profit and Loss
+        </Button>
+
+      <div className="table">
+        <ProfitTable profit={profit}/>
+    	</div>
+      </Box>
+
+
 
       <button onClick={e => logout(e)} className="header">
         Logout

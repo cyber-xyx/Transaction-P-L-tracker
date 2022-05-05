@@ -13,6 +13,7 @@ app.use("/auth", require("./routes/jwtAuth"))
 app.use("/dashboard", require("./routes/dashboard"));
 app.use("/insertdata", require("./routes/insertData"));
 app.use("/getdata", require("./routes/getData"));
+app.use("/retrievedata", require("./routes/retrieveData"));
 
 
 app.listen(5001, () => {
